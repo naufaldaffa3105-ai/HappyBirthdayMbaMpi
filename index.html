@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f7efe8, #f9d7d7);
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100vh;
+      color: #4b2e2e;
+    }
+
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 1s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.9);
+    }
+
+    .card {
+      width: 90%;
+      max-width: 1100px;
+      min-height: 85vh;
+      height: auto;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(15px);
+      border-radius: 35px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+
+    .left-side {
+      width: 45%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+    }
+
+    .birthday-info {
+      position: absolute;
+      bottom: 40px;
+      left: 35px;
+      color: white;
+      z-index: 3;
+    }
+
+    .birthday-info h1 {
+      font-size: 4rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .birthday-info p {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .right-side {
+      width: 55%;
+      padding: 50px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 4rem;
+      color: #c35b5b;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #8c6b6b;
+      margin-bottom: 35px;
+      line-height: 1.7;
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .time-box {
+      background: rgba(255,255,255,0.8);
+      border-radius: 22px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+    }
+
+    .time-box h2 {
+      font-size: 2.2rem;
+      color: #c35b5b;
+    }
+
+    .time-box span {
+      font-size: 0.95rem;
+      color: #7a5b5b;
+    }
+
+    .next-btn {
+      margin-top: 28px;
+      border: none;
+      background: linear-gradient(135deg, #d88181, #c35b5b);
+      color: white;
+      padding: 16px 30px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      width: fit-content;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(195,91,91,0.25);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* SECOND PAGE */
+
+    .book {
+      width: 1000px;
+      height: 650px;
+      position: relative;
+      perspective: 2000px;
+    }
+
+    .book-page {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: #fff8f4;
+      border-radius: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+      transform-origin: left;
+      transition: transform 1.5s ease;
+      overflow: hidden;
+    }
+
+    .book.open .book-page {
+      transform: rotateY(-170deg);
+    }
+
+    .cover-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f8d7da, #f6eee7);
+      text-align: center;
+      padding: 30px;
+    }
+
+    .cover-content h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 5rem;
+      color: #c35b5b;
+    }
+
+    .cover-content p {
+      margin-top: 15px;
+      color: #7a5b5b;
+    }
+
+    .inside {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fffdfb;
+      border-radius: 25px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 50px;
+      overflow: hidden;
+    }
+
+    .cake-area {
+      text-align: center;
+      width: 45%;
+    }
+
+    .wish-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5rem;
+      color: #c35b5b;
+      margin-bottom: 25px;
+    }
+
+    .cake {
+      position: relative;
+      width: 220px;
+      height: 180px;
+      margin: auto;
+      margin-top: 40px;
+    }
+
+    .cake-base {
+      position: absolute;
+      bottom: 0;
+      width: 220px;
+      height: 110px;
+      background: #e9a5a5;
+      border-radius: 15px;
+      box-shadow: inset 0 -10px rgba(0,0,0,0.08);
+    }
+
+    .icing {
+      position: absolute;
+      bottom: 90px;
+      width: 220px;
+      height: 40px;
+      background: #fff;
+      border-radius: 20px;
+    }
+
+    .candle {
+      position: absolute;
+      width: 20px;
+      height: 80px;
+      background: repeating-linear-gradient(
+        45deg,
+        #fff,
+        #fff 5px,
+        #ff8c8c 5px,
+        #ff8c8c 10px
+      );
+      left: 100px;
+      bottom: 120px;
+      border-radius: 8px;
+    }
+
+    .flame {
+      position: absolute;
+      width: 28px;
+      height: 45px;
+      background: radial-gradient(circle, #fff4a6 10%, #ff9d00 70%);
+      border-radius: 50% 50% 50% 50%;
+      left: -4px;
+      top: -38px;
+      animation: flicker 0.15s infinite alternate;
+      box-shadow: 0 0 25px #ffb300;
+      transition: all 0.6s ease;
+    }
+
+    .flame.out {
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    .smoke {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: rgba(180,180,180,0.6);
+      border-radius: 50%;
+      top: -40px;
+      left: 2px;
+      opacity: 0;
+      filter: blur(4px);
+    }
+
+    .smoke.show {
+      animation: smokeUp 2s ease forwards;
+    }
+
+    @keyframes smokeUp {
+      0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-70px) scale(2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flicker {
+      from {
+        transform: rotate(-3deg) scale(1);
+      }
+      to {
+        transform: rotate(3deg) scale(1.05);
+      }
+    }
+
+    .instruction {
+      margin-top: 35px;
+      color: #7a5b5b;
+      line-height: 1.8;
+    }
+
+    .mic-btn {
+      margin-top: 20px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 100px;
+      background: linear-gradient(135deg, #d88181, #c35b5b);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .mic-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .message-box {
+      width: 45%;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+      background: rgba(255,245,245,0.9);
+      border-radius: 25px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .message-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message-box h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #c35b5b;
+      margin-bottom: 15px;
+    }
+
+    .message-box p {
+      line-height: 1.9;
+      color: #6a5151;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      animation: sparkle 4s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translateY(100vh) scale(0);
+      }
+      100% {
+        transform: translateY(-120vh) scale(1);
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .card {
+        min-height: 92vh;
+      }
+
+      .right-side {
+        padding: 40px;
+      }
+
+      .title {
+        font-size: 3.3rem;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .page {
+        padding: 20px 0;
+        min-height: 100vh;
+        height: auto;
+      }
+
+      .card {
+        flex-direction: column;
+        width: 94%;
+        height: auto;
+        min-height: auto;
+        border-radius: 28px;
+      }
+
+      .left-side,
+      .right-side {
+        width: 100%;
+      }
+
+      .left-side {
+        height: 320px;
+      }
+
+      .birthday-info {
+        left: 24px;
+        bottom: 24px;
+      }
+
+      .birthday-info h1 {
+        font-size: 3rem;
+      }
+
+      .right-side {
+        padding: 24px 20px 30px;
+      }
+
+      .title {
+        font-size: 2.7rem;
+        line-height: 1.1;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+      }
+
+      .time-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .time-box {
+        padding: 15px 10px;
+        border-radius: 18px;
+      }
+
+      .time-box h2 {
+        font-size: 1.7rem;
+      }
+
+      .next-btn {
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 16px;
+        font-size: 0.95rem;
+      }
+
+      .book {
+        width: 94%;
+        height: auto;
+        min-height: 92vh;
+      }
+
+      .book-page {
+        border-radius: 25px;
+      }
+
+      .cover-content h1 {
+        font-size: 3.8rem;
+        text-align: center;
+      }
+
+      .inside {
+        position: relative;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 35px;
+        padding: 45px 22px;
+        height: auto;
+        min-height: 92vh;
+      }
+
+      .cake-area,
+      .message-box {
+        width: 100%;
+      }
+
+      .wish-title {
+        font-size: 3rem;
+      }
+
+      .cake {
+        transform: scale(0.9);
+        margin-top: 10px;
+      }
+
+      .instruction {
+        font-size: 0.92rem;
+        line-height: 1.7;
+      }
+
+      .mic-btn {
+        width: 100%;
+        padding: 15px;
+      }
+
+      .message-box {
+        padding: 28px 22px;
+        border-radius: 22px;
+      }
+
+      .message-box h2 {
+        font-size: 2.5rem;
+      }
+
+      .message-box p {
+        font-size: 0.95rem;
+        line-height: 1.8;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .left-side {
+        height: 260px;
+      }
+
+      .title {
+        font-size: 2.4rem;
+      }
+
+      .birthday-info h1 {
+        font-size: 2.5rem;
+      }
+
+      .time-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .time-box h2 {
+        font-size: 1.4rem;
+      }
+
+      .wish-title {
+        font-size: 2.5rem;
+      }
+
+      .cover-content h1 {
+        font-size: 3rem;
+      }
+
+      .cake {
+        transform: scale(0.75);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop autoplay volume="0.4">
+    <source src="lagu/justin-bieber-love-yourself_(MP3.co).mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="sparkles"></div>
+
+  <!-- PAGE 1 -->
+  <section class="page" id="page1">
+    <div class="card">
+
+      <div class="left-side">
+        <img src="Foto/WhatsApp Image 2026-05-23 at 14.15.18.jpeg" alt="Birthday Person">
+        <div class="overlay"></div>
+
+        <div class="birthday-info">
+          <p>Happy Birthday</p>
+          <h1>24</h1>
+          <p>May 2026</p>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div>
+          <h1 class="title">Birthday Countdown</h1>
+          <p class="subtitle">
+            Waktu terus berjalan hingga hari spesialnya mbaa ✨<br>
+            Dari tahun hingga detik, semuanya menuju momen ulang tahun mbampi pada 24 Mei 2026.
+          </p>
+
+          <div class="time-grid">
+            <div class="time-box">
+              <h2 id="years">0</h2>
+              <span>Tahun</span>
+            </div>
+
+            <div class="time-box">
+              <h2 id="months">0</h2>
+              <span>Bulan</span>
+            </div>
+
+            <div class="time-box">
+              <h2 id="days">0</h2>
+              <span>Hari</span>
+            </div>
+
+            <div class="time-box">
+              <h2 id="seconds">0</h2>
+              <span>Detik</span>
+            </div>
+          </div>
+
+          <button class="next-btn" onclick="openSecondPage()">
+            Open Birthday Card ✨
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="page hidden" id="page2">
+
+    <div class="book" id="book">
+
+      <div class="inside">
+
+        <div class="cake-area">
+          <h1 class="wish-title">Make a Wish</h1>
+
+          <div class="cake">
+            <div class="icing"></div>
+            <div class="cake-base"></div>
+
+            <div class="candle">
+              <div class="flame" id="flame"></div>
+              <div class="smoke" id="smoke"></div>
+            </div>
+          </div>
+
+          <div class="instruction">
+            Tiup lilinnya menggunakan suara 🎤<br>
+            atau klik tombol di bawah ini.
+          </div>
+
+          <button class="mic-btn" onclick="startBlowing()">
+            Blow The Candle
+          </button>
+        </div>
+
+        <div class="message-box" id="messageBox">
+          <h2>Happy Birthday ✨</h2>
+          <p>
+            Selamat ulang tahun, MbaMpii 🎉🥳<br><br>
+            Makasih banyak yaaa udah bantu dan nemenin selama masa magang ini. Maaf juga kalau aku belum banyak bantu 😅
+            Seneng banget bisa dapet mentor kayak Mba Alvi yang baik, pengertian, dan lucu level max wkwk.
+            <br><br>
+            Pokoknya tetap jadi MbaMpi yang asik, baik hati, dan vibes-nya selalu bikin nyaman yaa 🤍
+            Hari ini adalah harinya MbaMpii 💖
+          </p>
+        </div>
+
+      </div>
+
+      <div class="book-page">
+        <div class="cover-content">
+          <h1>Birthday Wishes</h1>
+          <p>Klik untuk membuka kartu ulang tahun ✨</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // Sparkles
+    const sparkleContainer = document.getElementById('sparkles');
+
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.classList.add('sparkle');
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      s.style.animationDelay = Math.random() * 5 + 's';
+      sparkleContainer.appendChild(s);
+    }
+
+    // Birthday time counter
+    const birthDate = new Date('2002-05-24T00:00:00');
+
+    function updateAge() {
+      const now = new Date();
+
+      let years = now.getFullYear() - birthDate.getFullYear();
+      let months = now.getMonth() - birthDate.getMonth();
+      let days = now.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      document.getElementById('years').innerText = years;
+      document.getElementById('months').innerText = months;
+      document.getElementById('days').innerText = days;
+      document.getElementById('seconds').innerText = now.getSeconds();
+    }
+
+    setInterval(updateAge, 1000);
+    updateAge();
+
+    // Page transition
+    function openSecondPage() {
+      document.getElementById('page1').classList.add('hidden');
+      document.getElementById('page2').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('book').classList.add('open');
+      }, 300);
+    }
+
+    // Blow candle
+    async function startBlowing() {
+      const flame = document.getElementById('flame');
+      const smoke = document.getElementById('smoke');
+      const messageBox = document.getElementById('messageBox');
+
+      function candleOff() {
+        flame.classList.add('out');
+        smoke.classList.add('show');
+
+        setTimeout(() => {
+          messageBox.classList.add('show');
+          createConfetti();
+        }, 700);
+      }
+
+      // Try microphone access
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const audioContext = new AudioContext();
+        const analyser = audioContext.createAnalyser();
+        const microphone = audioContext.createMediaStreamSource(stream);
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        microphone.connect(analyser);
+        analyser.fftSize = 256;
+
+        function detectBlow() {
+          analyser.getByteFrequencyData(dataArray);
+
+          let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+
+          if (volume > 45) {
+            candleOff();
+            stream.getTracks().forEach(track => track.stop());
+          } else {
+            requestAnimationFrame(detectBlow);
+          }
+        }
+
+        detectBlow();
+
+      } catch (err) {
+        // fallback manual
+        candleOff();
+      }
+    }
+
+    // Confetti effect
+    function createConfetti() {
+      for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement('div');
+
+        confetti.style.position = 'fixed';
+        confetti.style.width = '10px';
+        confetti.style.height = '10px';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-20px';
+        confetti.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
+        confetti.style.borderRadius = '2px';
+        confetti.style.zIndex = '9999';
+        confetti.style.pointerEvents = 'none';
+        confetti.style.transition = 'transform 4s linear, opacity 4s';
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg)`;
+          confetti.style.opacity = '0';
+        }, 50);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, 4000);
+      }
+    }
+
+    // autoplay music workaround
+    window.addEventListener('click', () => {
+      const music = document.getElementById('bgMusic');
+      music.play().catch(() => {});
+    }, { once: true });
+  </script>
+
+</body>
+</html>
